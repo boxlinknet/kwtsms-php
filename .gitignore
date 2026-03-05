@@ -18,6 +18,3 @@ CLAUDE.md
 
 # Internal docs and planning (local only)
 /docs/
-
-# Tests (local only, not published to registry or GitHub)
-/tests/
