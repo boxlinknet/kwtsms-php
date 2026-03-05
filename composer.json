@@ -2,7 +2,20 @@
     "name": "kwtsms/kwtsms",
     "description": "kwtSMS API Client for PHP. Official library to interface with the Kuwait SMS gateway (kwtsms.com)",
     "type": "library",
+    "keywords": ["kwtsms", "sms", "kuwait", "sms-gateway", "otp", "notification", "messaging"],
+    "homepage": "https://github.com/boxlinknet/kwtsms-php",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "M Alhassoun",
+            "email": "mo@boxlink.net",
+            "homepage": "https://boxlink.net"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/boxlinknet/kwtsms-php/issues",
+        "source": "https://github.com/boxlinknet/kwtsms-php"
+    },
     "require": {
         "php": ">=7.4",
         "ext-curl": "*",
