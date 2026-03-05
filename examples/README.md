@@ -1,65 +1,84 @@
-<!-- examples/README.md -->
-# Examples
+# kwtSMS PHP — Examples
 
-Runnable examples showing how to use the `kwtsms/kwtsms` PHP client library.
+Step-by-step examples covering everything from a first send to a production OTP
+system with CAPTCHA, rate limiting, and brute-force protection.
 
-## Prerequisites
+---
+
+## Setup
+
+### 1. Install
 
 ```bash
-# Install the library
 composer require kwtsms/kwtsms
-
-# Create your .env file
-cp .env.example .env    # then fill in your credentials
 ```
 
-Your `.env` file should contain:
+Requires PHP 7.4+, `ext-curl`, `ext-json`.
+
+### 2. Configure `.env`
+
+```bash
+cp .env.example .env
+```
+
 ```ini
-KWTSMS_USERNAME=your_api_username
-KWTSMS_PASSWORD=your_api_password
-KWTSMS_SENDER_ID=MY-BRAND
-KWTSMS_TEST_MODE=1          # Set to 0 when going live
-KWTSMS_LOG_FILE=kwtsms.log
+KWTSMS_USERNAME=php_username   # API user — NOT your phone number or website login
+KWTSMS_PASSWORD=php_password
+KWTSMS_SENDER_ID=KWT-SMS            # Replace with a private Sender ID before production
+KWTSMS_TEST_MODE=1                  # Set to 0 when ready to deliver real messages
+KWTSMS_LOG_FILE=kwtsms.log          # Leave empty to disable request logging
 ```
+
+Credentials: kwtsms.com → Account → API.
+
+### 3. Verify
+
+```bash
+php examples/01-quickstart.php
+```
+
+Expected output: `Connected! Balance: X credits`
 
 ---
 
 ## Examples
 
-| File | Description |
-|------|-------------|
-| [`01-quickstart.php`](01-quickstart.php) | Verify credentials and send your first SMS |
-| [`02-otp.php`](02-otp.php) | Send OTP verification codes with safe user-facing error handling |
-| [`03-bulk.php`](03-bulk.php) | Send to multiple recipients — small lists and auto-batched large lists |
-| [`04-validation.php`](04-validation.php) | Validate and normalize phone numbers locally and via API |
-| [`05-error-handling.php`](05-error-handling.php) | Handle every error category correctly in production |
-| [`06-message-cleaning.php`](06-message-cleaning.php) | See what gets stripped from messages and why |
-| [`07-laravel.php`](07-laravel.php) | Laravel Service Provider, Controller, and Notification integration |
-| [`08-wordpress.php`](08-wordpress.php) | WordPress plugin settings page, WooCommerce hooks, and 2FA login |
+| # | File | What it covers | Docs |
+|---|------|---------------|------|
+| 01 | `01-quickstart.php` | Verify credentials, send your first SMS | [docs](docs/01-quickstart.md) |
+| 02 | `02-otp.php` | Generate and send a one-time code (basic) | [docs](docs/02-otp.md) |
+| 03 | `03-bulk.php` | Send to many numbers — auto-batching for >200 | [docs](docs/03-bulk.md) |
+| 04 | `04-validation.php` | Local phone validation and API routing check | [docs](docs/04-validation.md) |
+| 05 | `05-error-handling.php` | Handle every error category with the right action | [docs](docs/05-error-handling.md) |
+| 06 | `06-message-cleaning.php` | What `clean_message()` strips and why | [docs](docs/06-message-cleaning.md) |
+| 07 | `07-laravel.php` | Service Provider, controller injection, Notification channel | [docs](docs/07-laravel.md) |
+| 08 | `08-wordpress.php` | Admin settings, WooCommerce hooks, 2FA login | [docs](docs/08-wordpress.md) |
+| 09 | `09-otp-production.php` | Full production OTP: DB, CAPTCHA, rate limiting, brute-force protection | [docs](docs/09-otp-production.md) |
 
 ---
 
-## Running the Examples
+## Reference
+
+- [Phone number formats](docs/reference.md#phone-number-format-reference) — accepted, normalized, and rejected inputs
+- [Sender ID guide](docs/reference.md#sender-id) — Promotional vs Transactional, DND, registration
+- [Error codes ERR001–ERR033](docs/reference.md#error-code-reference) — descriptions and recommended actions
+- [Pre-launch checklist](docs/reference.md#pre-launch-checklist) — credentials, security, content, anti-abuse
+
+---
+
+## CLI
+
+Send SMS and verify credentials from the terminal:
 
 ```bash
-# Run any example (from the repo root)
-php examples/01-quickstart.php
-php examples/02-otp.php
-php examples/03-bulk.php
-php examples/04-validation.php
-php examples/05-error-handling.php
-php examples/06-message-cleaning.php
+# Verify credentials and check balance
+vendor/bin/kwtsms verify
+
+# Send a message
+vendor/bin/kwtsms send --phone 96598765432 --message "Hello from kwtSMS"
+
+# Override sender ID for one message
+vendor/bin/kwtsms send --phone 96598765432 --message "Hello" --sender MY-BRAND
 ```
 
-> **Note:** Examples `07-laravel.php` and `08-wordpress.php` are reference guides with code snippets — they cannot be run directly.
-
----
-
-## Test Mode
-
-All examples respect `KWTSMS_TEST_MODE=1` in your `.env`. In test mode:
-- Messages are queued by kwtSMS but **never delivered** to the handset
-- **No credits are consumed**
-- API responses are identical to live mode
-
-Set `KWTSMS_TEST_MODE=0` only when you are ready to send real messages.
+Reads credentials from `.env` or environment variables.

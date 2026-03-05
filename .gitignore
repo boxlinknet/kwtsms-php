@@ -1,4 +1,5 @@
 /vendor/
+/composer.lock
 /.phpunit.cache/
 /.php-cs-fixer.cache/
 .phpunit.result.cache
@@ -8,13 +9,23 @@
 *.env
 *.log
 
-# IDE files
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE and editor files
 .vscode/
 .idea/
-*.DS_Store
+*.swp
+*.swo
 
-# Claude Code config (local only)
+# Claude Code config and memory (local only)
 CLAUDE.md
+/.claude/
+
+# GitHub Actions and workflows (local only)
+/.github/
 
 # Internal docs and planning (local only)
 /docs/

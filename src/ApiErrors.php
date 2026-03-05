@@ -143,11 +143,9 @@ class ApiErrors
             $response['description'] = self::ERRORS[$code]['description'];
         }
 
-        // Always add our internal action mapping if it exists
-        if (isset(self::ERRORS[$code])) {
+        // Add our action mapping only if the response doesn't already carry one
+        if (isset(self::ERRORS[$code]) && !isset($response['action'])) {
             $response['action'] = self::ERRORS[$code]['action'];
-        } else {
-            // For ERR999 or any unknown codes, omit the action, PRD requirement
         }
 
         return $response;

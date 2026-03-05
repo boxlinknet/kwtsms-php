@@ -21,7 +21,7 @@ class IntegrationTest extends TestCase
         return !empty(getenv('KWTSMS_USERNAME'));
     }
 
-    public function testVerifyRequiresCredentials()
+    public function testVerifyRequiresCredentials(): void
     {
         if (!$this->isConfigured()) {
             $this->markTestSkipped('No real credentials provided. Skipping live API validation.');
@@ -35,9 +35,9 @@ class IntegrationTest extends TestCase
         $this->assertSame('', $err);
     }
 
-    public function testWrongCredentials()
+    public function testWrongCredentials(): void
     {
-        $badClient = new KwtSMS('dummy_user', 'dummy_pass_9999991823', 'KWT-SMS', true);
+        $badClient = new KwtSMS('php_username', 'php_password_invalid', 'KWT-SMS', true);
         [$ok, $bal, $err] = $badClient->verify();
 
         $this->assertFalse($ok);
@@ -45,7 +45,7 @@ class IntegrationTest extends TestCase
         $this->assertStringContainsString('These are your API credentials', $err);
     }
 
-    public function testSendToValidKuwaitNumber()
+    public function testSendToValidKuwaitNumber(): void
     {
         if (!$this->isConfigured()) {
             $this->markTestSkipped('No real credentials provided.');
@@ -65,7 +65,7 @@ class IntegrationTest extends TestCase
         $this->assertArrayHasKey('msg-id', $result);
     }
 
-    public function testSendInvalidNumberFormat()
+    public function testSendInvalidNumberFormat(): void
     {
         if (!$this->isConfigured()) {
             $this->markTestSkipped('No real credentials provided.');
@@ -82,7 +82,7 @@ class IntegrationTest extends TestCase
         $this->assertStringContainsString('no digits', $result['invalid'][0]['error']);
     }
 
-    public function testSendMixedNumbers()
+    public function testSendMixedNumbers(): void
     {
         if (!$this->isConfigured()) {
             $this->markTestSkipped('No real credentials provided.');
@@ -106,7 +106,7 @@ class IntegrationTest extends TestCase
         $this->assertSame('123', $result['invalid'][1]['number']);
     }
 
-    public function testSenderIdsList()
+    public function testSenderIdsList(): void
     {
         if (!$this->isConfigured()) {
             $this->markTestSkipped('No real credentials provided.');
@@ -117,7 +117,7 @@ class IntegrationTest extends TestCase
         $this->assertIsArray($result['senderids']);
     }
 
-    public function testCoverageList()
+    public function testCoverageList(): void
     {
         if (!$this->isConfigured()) {
             $this->markTestSkipped('No real credentials provided.');

@@ -27,26 +27,31 @@ class PhoneUtilsTest extends TestCase
         // Missing
         [$valid, $err, $norm] = PhoneUtils::validate_phone_input('');
         $this->assertFalse($valid);
+        $this->assertIsString($err);
         $this->assertStringContainsString('required', $err);
 
         // Blank
         [$valid, $err, $norm] = PhoneUtils::validate_phone_input('   ');
         $this->assertFalse($valid);
+        $this->assertIsString($err);
         $this->assertStringContainsString('required', $err);
 
         // Email block
         [$valid, $err, $norm] = PhoneUtils::validate_phone_input('admin@test.com');
         $this->assertFalse($valid);
+        $this->assertIsString($err);
         $this->assertStringContainsString('email address', $err);
 
         // No digits block
         [$valid, $err, $norm] = PhoneUtils::validate_phone_input('call me');
         $this->assertFalse($valid);
+        $this->assertIsString($err);
         $this->assertStringContainsString('no digits found', $err);
 
         // Too short
         [$valid, $err, $norm] = PhoneUtils::validate_phone_input('123456'); // 6 chars
         $this->assertFalse($valid);
+        $this->assertIsString($err);
         $this->assertStringContainsString('too short', $err);
 
         // Min length (7)
@@ -57,6 +62,7 @@ class PhoneUtilsTest extends TestCase
         // Too long
         [$valid, $err, $norm] = PhoneUtils::validate_phone_input('1234567890123456'); // 16 chars
         $this->assertFalse($valid);
+        $this->assertIsString($err);
         $this->assertStringContainsString('too long', $err);
 
         // Max length (15)

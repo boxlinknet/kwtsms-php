@@ -85,8 +85,8 @@ The recommended and safest method to load credentials. The client library handle
 Create a `.env` file in the root directory of your project (and ensure it is added to `.gitignore`), and populate it with your kwtSMS credentials:
 
 ```ini
-KWTSMS_USERNAME=your_api_user
-KWTSMS_PASSWORD=your_api_pass
+KWTSMS_USERNAME=php_username
+KWTSMS_PASSWORD=php_password
 KWTSMS_SENDER_ID=YOUR-SENDERID
 KWTSMS_TEST_MODE=1
 KWTSMS_LOG_FILE=kwtsms.log
@@ -108,8 +108,8 @@ If the `.env` file is missing, the client natively falls back to global environm
 ```php
 // Injecting specifically without .env mappings:
 $sms = new \KwtSMS\KwtSMS(
-    'your_api_user', 
-    'your_api_pass', 
+    'php_username', 
+    'php_password', 
     'YOUR-SENDERID', 
     false, // test mode
     'storage/logs/kwtsms.log' // log file
