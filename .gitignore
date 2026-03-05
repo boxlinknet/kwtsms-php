@@ -24,8 +24,5 @@ Desktop.ini
 CLAUDE.md
 .claude/
 
-# GitHub Actions and workflows (local only)
-/.github/
-
 # Internal docs and planning (local only)
 /docs/
