@@ -1,0 +1,35 @@
+{
+    "name": "kwtsms/kwtsms",
+    "description": "kwtSMS API Client for PHP. Official library to interface with the Kuwait SMS gateway (kwtsms.com)",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.40",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^9.6",
+        "symfony/var-dumper": "^7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "KwtSMS\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "KwtSMS\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "phpstan": "vendor/bin/phpstan analyse src tests",
+        "format": "vendor/bin/php-cs-fixer fix src tests"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
