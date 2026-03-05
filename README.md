@@ -273,6 +273,44 @@ print_r($result['prefixes']);
 
 ---
 
+### `status(string $msgId)`
+
+Check the queue/dispatch status of a sent message. Use the `msg-id` returned by `send()`.
+
+```php
+$result = $sms->status($msgId);
+
+if ($result['result'] === 'OK') {
+    echo $result['status'];      // e.g. "sent"
+    echo $result['description']; // e.g. "Message successfully sent to gateway"
+} else {
+    // ERR029: msg-id not found
+    // ERR030: stuck in queue — delete at kwtsms.com → Queue to recover credits
+    echo $result['action'];
+}
+```
+
+---
+
+### `dlr(string $msgId)`
+
+Retrieve delivery reports for a sent message. Only available for international (non-Kuwait) numbers. Wait at least 5 minutes after sending before calling.
+
+```php
+$result = $sms->dlr($msgId);
+
+if ($result['result'] === 'OK') {
+    foreach ($result['report'] as $entry) {
+        echo $entry['Number'] . ': ' . $entry['Status'] . "\n";
+        // e.g. "96550123456: Received by recipient"
+    }
+}
+```
+
+> Kuwait numbers do not support DLR. For Kuwait delivery confirmation, use `status()` instead.
+
+---
+
 ## Utility Classes
 
 ### `PhoneUtils::validate_phone_input()`
