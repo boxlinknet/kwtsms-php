@@ -30,7 +30,8 @@ class KwtSMS
      * @param string $password
      * @param string $sender_id
      * @param bool $test_mode
-     * @param string $log_file
+     * @param string $log_file  Path for NDJSON log. Empty string disables logging.
+     *                          Must not contain '..' (path traversal guard).
      */
     public function __construct(
         string $username,
@@ -39,17 +40,28 @@ class KwtSMS
         bool $test_mode = false,
         string $log_file = 'kwtsms.log'
     ) {
-        $this->username = $username;
-        $this->password = $password;
+        // Strip embedded newlines from credentials to prevent env-injection if
+        // these values are ever written back to a .env file or a log entry.
+        $this->username = str_replace(["\r", "\n"], '', $username);
+        $this->password = str_replace(["\r", "\n"], '', $password);
         $this->sender_id = $sender_id;
         $this->test_mode = $test_mode;
-        $this->log_file = $log_file;
+        // Guard against path traversal via '..' segments
+        $this->log_file = ($log_file !== '' && strpos($log_file, '..') !== false) ? '' : $log_file;
         $this->purchased = null;
     }
 
     /**
      * Factory: Load credentials from env vars -> .env fallback.
-     * 
+     *
+     * Parsing rules for .env file:
+     * - Lines starting with # are comments and are skipped.
+     * - Lines without a key (empty left-hand side of '=') are skipped.
+     * - Values with matching surrounding quotes (" or ') have them stripped; hashes inside are literal.
+     * - Mismatched/unclosed leading quote: quote is stripped and value treated as unquoted.
+     * - Unquoted values: trailing inline comments (space or tab + #) are stripped.
+     * - Existing env vars always take precedence over file values.
+     *
      * @param string $env_file
      * @return self
      */
@@ -67,6 +79,32 @@ class KwtSMS
                     if (count($parts) === 2) {
                         $key = trim($parts[0]);
                         $val = trim($parts[1]);
+
+                        // Skip lines with an empty key (e.g. "=value")
+                        if ($key === '') {
+                            continue;
+                        }
+
+                        // Strip quotes or inline comments
+                        $first = strlen($val) > 0 ? $val[0] : '';
+                        if (($first === '"' || $first === "'") && strlen($val) >= 2 && $val[strlen($val) - 1] === $first) {
+                            // Matched surrounding quotes: strip them; hashes inside are literal
+                            $val = substr($val, 1, -1);
+                        } else {
+                            // Unquoted or mismatched leading quote
+                            if ($first === '"' || $first === "'") {
+                                $val = substr($val, 1); // strip the dangling leading quote
+                            }
+                            // Strip trailing inline comment (space or tab before #)
+                            if (preg_match('/[ \t]#/', $val, $m, PREG_OFFSET_CAPTURE)) {
+                                $val = rtrim(substr($val, 0, (int) $m[0][1]));
+                            }
+                        }
+
+                        // Strip embedded newlines — prevents env-injection if this
+                        // value is later written to a .env file or passed to putenv().
+                        $val = str_replace(["\r", "\n"], '', $val);
+
                         if (!getenv($key)) {
                             putenv("{$key}={$val}");
                             $_ENV[$key] = $val;
@@ -111,6 +149,7 @@ class KwtSMS
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_TIMEOUT, 15);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
@@ -123,9 +162,6 @@ class KwtSMS
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
         curl_close($ch);
-
-        $ok = false;
-        $decoded = null;
 
         if ($responseBody === false || $responseBody === '') {
             $err = [
@@ -226,6 +262,17 @@ class KwtSMS
     }
 
     /**
+     * Total SMS credits purchased on the account, cached from the last balance/verify call.
+     * Returns null if balance/verify has not been called yet.
+     *
+     * @return float|null
+     */
+    public function purchased(): ?float
+    {
+        return $this->purchased;
+    }
+
+    /**
      * Extract the active sender ID.
      * @param string|null $sender
      * @return string
@@ -255,13 +302,12 @@ class KwtSMS
      * Bulk send logic handling >200 numbers, 0.5s delays, and retries.
      *
      * @param array<int, string> $valid
-     * @param array<int, string> $invalid
-     * @param array<int, mixed> $validation_results (optional) used only if returning raw validation info
+     * @param array<int, array{number: string, error: string|null}> $invalid
      * @param string $message
      * @param string|null $sender
      * @return array<string, mixed>
      */
-    private function _send_bulk(array $valid, array $invalid, array $validation_results, string $message, ?string $sender): array
+    private function send_bulk(array $valid, array $invalid, string $message, ?string $sender): array
     {
         $batches = array_chunk($valid, 200);
 
@@ -274,7 +320,7 @@ class KwtSMS
             'msg-ids' => [],
             'numbers' => count($valid),
             'points-charged' => 0.0,
-            'balance-after' => $this->balance(), // Pre-fetch balance if no successful sends update it
+            'balance-after' => null,
             'errors' => [],
             'invalid' => $invalid
         ];
@@ -336,7 +382,8 @@ class KwtSMS
         if ($hasSuccess && !$hasError) {
             $aggregated['result'] = 'OK';
             $aggregated['description'] = 'Bulk processed successfully';
-        } elseif ($hasSuccess && $hasError) {
+        } elseif ($hasSuccess) {
+            // $hasError is always true here (first branch excluded it)
             $aggregated['result'] = 'PARTIAL';
             $aggregated['code'] = 'PARTIAL';
             $aggregated['description'] = 'Some batches failed';
@@ -368,7 +415,7 @@ class KwtSMS
 
     /**
      * Validate numbers against PhoneUtils logic without calling API.
-     * 
+     *
      * @param string|array<int, string> $mobile
      * @return array<string, mixed>
      */
@@ -430,6 +477,10 @@ class KwtSMS
         $valid_list = $validation['_valid_list'];
         $rejected = $validation['rejected'];
 
+        // Deduplicate: avoid double-charging when the same normalized number appears more than once.
+        // validate() preserves all entries for auditing; send() only dispatches unique numbers.
+        $valid_list = array_values(array_unique($valid_list));
+
         // Core error: if everything is invalid (or empty list provided)
         if (empty($valid_list)) {
             return ApiErrors::enrichError([
@@ -443,10 +494,19 @@ class KwtSMS
         $cleaned_message = MessageUtils::clean_message($message);
 
         if (trim($cleaned_message) === '') {
+            // Distinguish a truly empty input from one that became empty after
+            // stripping emojis, HTML, and unsupported characters, so the caller
+            // gets an actionable error message in both cases.
+            $was_non_empty = trim($message) !== '';
             return ApiErrors::enrichError([
-                'result' => 'ERROR',
-                'code' => 'ERR009',
-                'description' => 'Message is empty.',
+                'result'      => 'ERROR',
+                'code'        => 'ERR009',
+                'description' => $was_non_empty
+                    ? 'Message is empty after cleaning (contained only emojis, HTML, or unsupported characters).'
+                    : 'Message is empty.',
+                'action'      => $was_non_empty
+                    ? 'Remove emojis, HTML tags, and hidden Unicode characters from the message text.'
+                    : 'Provide a non-empty message.',
             ]);
         }
 
@@ -469,7 +529,7 @@ class KwtSMS
         }
 
         // Bulk flow (> 200 items)
-        return $this->_send_bulk($valid_list, $rejected, $validation['raw'], $cleaned_message, $sender);
+        return $this->send_bulk($valid_list, $rejected, $cleaned_message, $sender);
     }
 
     /**

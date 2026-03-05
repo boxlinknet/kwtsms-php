@@ -25,8 +25,8 @@ use KwtSMS\KwtSMS;
 //
 // Your .env file should look like this:
 //
-//   KWTSMS_USERNAME=your_api_username
-//   KWTSMS_PASSWORD=your_api_password
+//   KWTSMS_USERNAME=php_username
+//   KWTSMS_PASSWORD=php_password
 //   KWTSMS_SENDER_ID=MY-BRAND
 //   KWTSMS_TEST_MODE=1           <- set to 0 when going live
 //   KWTSMS_LOG_FILE=kwtsms.log

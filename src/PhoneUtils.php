@@ -9,7 +9,7 @@ class PhoneUtils
      *
      * @var array<string, string>
      */
-    private const DIGITS_MAP = [
+    public const DIGITS_MAP = [
         '٠' => '0',
         '١' => '1',
         '٢' => '2',

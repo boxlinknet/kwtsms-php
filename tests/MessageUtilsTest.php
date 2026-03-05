@@ -34,5 +34,21 @@ class MessageUtilsTest extends TestCase
 
         // Arabic text itself must NOT be stripped
         $this->assertSame('مرحبا بالعالم', MessageUtils::clean_message('مرحبا بالعالم'));
+
+        // Extended emoji ranges (added: flags, keycap, mahjong tiles, tags block)
+
+        // Country flags — Regional Indicator Symbols (U+1F1E0–U+1F1FF, below old start of 1F300)
+        // 🇺🇸 = U+1F1FA (U) + U+1F1F8 (S)
+        $this->assertSame('Flag: ', MessageUtils::clean_message("Flag: \u{1F1FA}\u{1F1F8}"));
+
+        // Mahjong tile 🀄 (U+1F004) — below old start of 0x1F300
+        $this->assertSame('', MessageUtils::clean_message("\u{1F004}"));
+
+        // Keycap U+20E3 — Combining Enclosing Keycap (used in 1️⃣ = "1" + U+FE0F + U+20E3)
+        // Digit "1" must be preserved; only the emoji modifier characters are stripped
+        $this->assertSame('1', MessageUtils::clean_message("1\u{FE0F}\u{20E3}"));
+
+        // Tags block U+E0062 — used in subdivision flag sequences (e.g. 🏴󠁧󠁢󠁳󠁣󠁴󠁿 for Scotland)
+        $this->assertSame('', MessageUtils::clean_message("\u{E0062}"));
     }
 }

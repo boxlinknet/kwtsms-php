@@ -29,6 +29,7 @@
         "phpstan": "vendor/bin/phpstan analyse src tests",
         "format": "vendor/bin/php-cs-fixer fix src tests"
     },
+    "bin": ["bin/kwtsms"],
     "config": {
         "sort-packages": true
     }

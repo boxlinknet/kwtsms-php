@@ -33,7 +33,7 @@ class ApiErrorsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->client = new MockKwtSMS('dummy_username', 'dummy_password', 'TEST', true);
+        $this->client = new MockKwtSMS('php_username', 'php_password', 'TEST', true);
     }
 
     public function testAuthenticationError(): void

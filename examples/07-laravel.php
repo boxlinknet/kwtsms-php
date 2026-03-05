@@ -172,8 +172,8 @@ class SmsChannel
 // ════════════════════════════════════════════════════════════════════════════
 
 /*
-KWTSMS_USERNAME=your_api_username
-KWTSMS_PASSWORD=your_api_password
+KWTSMS_USERNAME=php_username
+KWTSMS_PASSWORD=php_password
 KWTSMS_SENDER_ID=MY-BRAND
 KWTSMS_TEST_MODE=false
 KWTSMS_LOG_FILE=
