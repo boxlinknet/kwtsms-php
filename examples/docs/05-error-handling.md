@@ -1,9 +1,9 @@
-# Example 05 — Error Handling
+# Example 05: Error Handling
 
 **File:** `examples/05-error-handling.php`
 **Run:** `php examples/05-error-handling.php`
 
-Handle every error category correctly — with the right response for each type
+Handle every error category correctly, with the right response for each type
 (alert admin, retry with backoff, log and skip).
 
 ---
@@ -58,7 +58,7 @@ if ($result['result'] !== 'OK') {
 }
 ```
 
-Use `action` directly in admin dashboards or logs — no need to maintain your own
+Use `action` directly in admin dashboards or logs. No need to maintain your own
 error-to-action mapping.
 
 ### Handling ERR028 (15-second minimum)
@@ -80,7 +80,7 @@ ERR028 rejects the **entire request** if any number was sent to within the last
 use KwtSMS\ApiErrors;
 
 foreach (ApiErrors::ERRORS as $code => $info) {
-    echo "[{$code}] {$info['description']} → {$info['action']}\n";
+    echo "[{$code}] {$info['description']} ({$info['action']})\n";
 }
 ```
 

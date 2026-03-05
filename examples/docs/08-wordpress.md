@@ -1,7 +1,7 @@
-# Example 08 — WordPress Integration
+# Example 08: WordPress Integration
 
 **File:** `examples/08-wordpress.php`
-**Run:** Reference only — copy snippets into your plugin file
+**Run:** Reference only. Copy snippets into your plugin file.
 
 Integrate kwtSMS into a WordPress plugin with an admin settings page,
 WooCommerce order SMS notifications, and two-factor authentication on login.
@@ -35,7 +35,7 @@ WordPress Plugin
 
 ## Setup
 
-### Step 1 — Install via Composer inside your plugin
+### Step 1: Install via Composer inside your plugin
 
 ```bash
 cd wp-content/plugins/my-plugin/
@@ -48,7 +48,7 @@ In your main plugin file:
 require_once __DIR__ . '/vendor/autoload.php';
 ```
 
-### Step 2 — Register activation hook
+### Step 2: Register activation hook
 
 ```php
 register_activation_hook(__FILE__, 'my_plugin_activate');
@@ -60,7 +60,7 @@ function my_plugin_activate(): void
 }
 ```
 
-### Step 3 — Add settings page
+### Step 3: Add settings page
 
 Copy `kwtsms_get_client()` and `kwtsms_settings_page()` from `08-wordpress.php`.
 Register the menu item:
@@ -71,16 +71,16 @@ add_action('admin_menu', function () {
 });
 ```
 
-### Step 4 — Security in the settings form
+### Step 4: Security in the settings form
 
 The settings form follows WordPress security best practices:
 
-- `check_admin_referer('kwtsms_settings')` — CSRF protection via nonce
-- `sanitize_text_field()` on all inputs — prevents XSS in saved values
-- `esc_attr()` on output — prevents XSS in HTML attributes
-- Password field is intentionally blank (`value=""`) — never render stored passwords
+- `check_admin_referer('kwtsms_settings')`: CSRF protection via nonce
+- `sanitize_text_field()` on all inputs: prevents XSS in saved values
+- `esc_attr()` on output: prevents XSS in HTML attributes
+- Password field is intentionally blank (`value=""`): never render stored passwords
 
-### Step 5 — WooCommerce hook
+### Step 5: WooCommerce hook
 
 ```php
 add_action('woocommerce_order_status_changed',
@@ -102,7 +102,7 @@ add_action('woocommerce_order_status_changed',
 );
 ```
 
-### Step 6 — 2FA login flow
+### Step 6: 2FA login flow
 
 ```
 User submits login form

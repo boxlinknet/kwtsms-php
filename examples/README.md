@@ -1,4 +1,4 @@
-# kwtSMS PHP — Examples
+# kwtSMS PHP: Examples
 
 Step-by-step examples covering everything from a first send to a production OTP
 system with CAPTCHA, rate limiting, and brute-force protection.
@@ -47,7 +47,7 @@ Expected output: `Connected! Balance: X credits`
 |---|------|---------------|------|
 | 01 | `01-quickstart.php` | Verify credentials, send your first SMS | [docs](docs/01-quickstart.md) |
 | 02 | `02-otp.php` | Generate and send a one-time code (basic) | [docs](docs/02-otp.md) |
-| 03 | `03-bulk.php` | Send to many numbers — auto-batching for >200 | [docs](docs/03-bulk.md) |
+| 03 | `03-bulk.php` | Send to many numbers, auto-batching for >200 | [docs](docs/03-bulk.md) |
 | 04 | `04-validation.php` | Local phone validation and API routing check | [docs](docs/04-validation.md) |
 | 05 | `05-error-handling.php` | Handle every error category with the right action | [docs](docs/05-error-handling.md) |
 | 06 | `06-message-cleaning.php` | What `clean_message()` strips and why | [docs](docs/06-message-cleaning.md) |
@@ -59,10 +59,10 @@ Expected output: `Connected! Balance: X credits`
 
 ## Reference
 
-- [Phone number formats](docs/reference.md#phone-number-format-reference) — accepted, normalized, and rejected inputs
-- [Sender ID guide](docs/reference.md#sender-id) — Promotional vs Transactional, DND, registration
-- [Error codes ERR001–ERR033](docs/reference.md#error-code-reference) — descriptions and recommended actions
-- [Pre-launch checklist](docs/reference.md#pre-launch-checklist) — credentials, security, content, anti-abuse
+- [Phone number formats](docs/reference.md#phone-number-format-reference): accepted, normalized, and rejected inputs
+- [Sender ID guide](docs/reference.md#sender-id): Promotional vs Transactional, DND, registration
+- [Error codes ERR001–ERR033](docs/reference.md#error-code-reference): descriptions and recommended actions
+- [Pre-launch checklist](docs/reference.md#pre-launch-checklist): credentials, security, content, anti-abuse
 
 ---
 

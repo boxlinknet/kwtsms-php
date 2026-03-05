@@ -1,10 +1,9 @@
-# Example 04 — Phone Validation
+# Example 04: Phone Validation
 
 **File:** `examples/04-validation.php`
 **Run:** `php examples/04-validation.php`
 
-Clean and validate phone numbers — locally (instant, no API call) or against
-the kwtSMS routing database (checks carrier support).
+Clean and validate phone numbers locally (instant, no API call) before sending.
 
 ---
 
@@ -26,24 +25,24 @@ Input phone string
 No network call. Instant. Use on every form input before send().
 
 
-Option B: API validation  ($sms->validate)
-──────────────────────────────────────────
+Option B: Batch local validation  ($sms->validate)
+────────────────────────────────────────────────────
 Input: array of numbers
   │
-  ├─ Local pre-validation on each number
-  ├─ POST to /API/validate/  (network call)
+  ├─ Runs PhoneUtils::validate_phone_input on each number  (no network call)
   │
   └─ Returns breakdown:
-       OK  → valid and routable on your account
-       ER  → format error
-       NR  → no route (country not activated)
+       ok       count of locally valid numbers
+       er       count of invalid numbers
+       rejected array with number and error message per invalid entry
+       raw      full per-number detail (input, valid, normalized, error)
 ```
 
 ---
 
 ## Step-by-Step
 
-### Local validation — use for all user input
+### Local validation: use for all user input
 
 ```php
 use KwtSMS\PhoneUtils;
@@ -59,7 +58,7 @@ if (!$valid) {
 
 Use local validation first on every form submission:
 
-1. Instant — no network round-trip
+1. Instant, no network round-trip
 2. Catches emails, empty strings, and short numbers before any API call
 3. Returns the normalized number ready to pass to `send()`
 
@@ -68,18 +67,18 @@ Use local validation first on every form submission:
 ```
 "+965 9876-5432"  → "96598765432"   strip +, spaces, dashes
 "0096598765432"   → "96598765432"   strip leading 00
-"٩٦٥٩٨٧٦٥٤٣٢"   → "96598765432"   Arabic-Indic digits → Latin
-"۹۶۵۹۸۷۶۵۴۳۲"   → "96598765432"   Extended Arabic-Indic → Latin
+"٩٦٥٩٨٧٦٥٤٣٢"   → "96598765432"   Arabic-Indic digits to Latin
+"۹۶۵۹۸۷۶۵۴۳۲"   → "96598765432"   Extended Arabic-Indic to Latin
 "(965) 9876.5432" → "96598765432"   strip parentheses and dots
 ```
 
-### API validation — use before bulk campaigns
+### Batch validation with `$sms->validate()`: local, no API call
 
 ```php
 $report = $sms->validate($numberList);
 
 echo $report['nr'];  // total submitted
-echo $report['ok'];  // locally valid count
+echo $report['ok'];  // valid count
 echo $report['er'];  // invalid count
 
 foreach ($report['rejected'] as $r) {
@@ -88,15 +87,18 @@ foreach ($report['rejected'] as $r) {
 
 // Full detail per number:
 foreach ($report['raw'] as $entry) {
-    // $entry['phone']      → original input
-    // $entry['valid']      → bool
-    // $entry['normalized'] → cleaned number (if valid)
-    // $entry['error']      → error message (if invalid)
+    // $entry['phone']      original input
+    // $entry['valid']      bool
+    // $entry['normalized'] cleaned number (if valid)
+    // $entry['error']      error message (if invalid)
 }
 ```
 
-`/API/validate/` checks routability on your specific account — catches countries
-you haven't activated. For single OTP sends, local validation is sufficient.
+`$sms->validate()` is **local only**. No network call is made. It runs
+`PhoneUtils::validate_phone_input()` on each number and returns a structured report.
+
+For routing validation (checking if numbers are reachable on your account),
+use the kwtSMS web dashboard or call `/API/validate/` directly.
 
 ---
 
@@ -105,9 +107,9 @@ you haven't activated. For single OTP sends, local validation is sufficient.
 | Scenario | Use |
 |----------|-----|
 | Single user input on a form | `PhoneUtils::validate_phone_input()` |
-| Before every `send()` call | Built-in to `send()` — no extra call needed |
+| Before every `send()` call | Built-in to `send()`, no extra call needed |
 | Cleaning an imported CSV | `PhoneUtils::validate_phone_input()` in a loop |
-| Pre-campaign routing check | `$sms->validate($list)` — API call |
+| Pre-campaign routing check | `/API/validate/` directly or kwtSMS dashboard |
 
 See [phone number format reference](reference.md#phone-number-format-reference) for
 the full list of accepted and rejected formats.

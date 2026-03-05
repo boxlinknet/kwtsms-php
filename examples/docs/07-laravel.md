@@ -1,7 +1,7 @@
-# Example 07 — Laravel Integration
+# Example 07: Laravel Integration
 
 **File:** `examples/07-laravel.php`
-**Run:** Reference only — copy snippets into your Laravel app
+**Run:** Reference only. Copy snippets into your Laravel app.
 
 Integrate kwtSMS as a first-class Laravel service with a Service Provider,
 configuration file, controller injection, and an optional Notification channel.
@@ -27,13 +27,13 @@ Laravel App
 
 ## Setup
 
-### Step 1 — Install
+### Step 1: Install
 
 ```bash
 composer require kwtsms/kwtsms
 ```
 
-### Step 2 — Create config file
+### Step 2: Create config file
 
 `config/kwtsms.php`:
 
@@ -47,7 +47,7 @@ return [
 ];
 ```
 
-### Step 3 — Add to `.env`
+### Step 3: Add to `.env`
 
 ```ini
 KWTSMS_USERNAME=php_username
@@ -57,7 +57,7 @@ KWTSMS_TEST_MODE=false
 KWTSMS_LOG_FILE=
 ```
 
-### Step 4 — Create the Service Provider
+### Step 4: Create the Service Provider
 
 Create `app/Providers/KwtSmsServiceProvider.php` (see `07-laravel.php` for full
 code). Register in `config/app.php` → `providers`:
@@ -66,7 +66,7 @@ code). Register in `config/app.php` → `providers`:
 App\Providers\KwtSmsServiceProvider::class,
 ```
 
-### Step 5 — Use in a controller
+### Step 5: Use in a controller
 
 ```php
 class AuthController extends Controller
@@ -93,7 +93,7 @@ class AuthController extends Controller
 }
 ```
 
-### Step 6 — (Optional) Notification Channel
+### Step 6: (Optional) Notification Channel
 
 ```php
 // In a Notifiable model (e.g. User):
@@ -129,4 +129,4 @@ POST /auth/otp/verify
 ```
 
 For production Laravel OTP with rate limiting and queue-based sending, see
-[Example 09](09-otp-production.md) — swap PDO storage for Eloquent/Redis.
+[Example 09](09-otp-production.md): swap PDO storage for Eloquent/Redis.

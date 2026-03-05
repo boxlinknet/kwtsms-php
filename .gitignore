@@ -22,7 +22,7 @@ Desktop.ini
 
 # Claude Code config and memory (local only)
 CLAUDE.md
-/.claude/
+.claude/
 
 # GitHub Actions and workflows (local only)
 /.github/
