@@ -11,6 +11,25 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.2.0] 2026-03-05
+
+### Added
+- `KwtSMS::status(string $msgId)`: check the queue/dispatch status of a sent message.
+  Returns `status` and `description` on OK. Handles ERR029 (not found) and ERR030
+  (stuck in queue with credits recoverable from dashboard).
+- `KwtSMS::dlr(string $msgId)`: retrieve delivery reports for international sends.
+  Returns a `report` array of `{Number, Status}` entries. Only available for
+  non-Kuwait numbers; wait at least 5 minutes after send before calling.
+- GitHub Actions CI: automated test matrix across PHP 7.4, 8.1, 8.2, and 8.3
+  on every push and pull request.
+- `SECURITY.md`: private vulnerability reporting policy via GitHub Security Advisories.
+- README badges: Packagist version, total downloads, PHP version, license, CI status.
+
+### Changed
+- Test count: 63 → 71 tests, 220 → 246 assertions.
+
+---
+
 ## [1.1.0] 2026-03-05
 
 ### Added
@@ -100,11 +119,13 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 | Version | Date | PHP | Notable Change |
 |---------|------|-----|----------------|
+| 1.2.0 | 2026-03-05 | 7.4+ | status(), dlr(), CI, badges, SECURITY.md |
 | 1.1.0 | 2026-03-05 | 7.4+ | CLI tool, production OTP example, extended emoji ranges |
 | 1.0.0 | 2026-03-05 | 7.4+ | Initial release |
 
 ---
 
-[Unreleased]: https://github.com/boxlinknet/kwtsms-php/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/boxlinknet/kwtsms-php/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/boxlinknet/kwtsms-php/releases/tag/v1.0.0
