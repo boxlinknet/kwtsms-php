@@ -1,4 +1,4 @@
-# Example 01 — Quick Start
+# Example 01: Quick Start
 
 **File:** `examples/01-quickstart.php`
 **Run:** `php examples/01-quickstart.php`
@@ -23,7 +23,7 @@ Start
   ├─ 3. Send a single SMS  ────────→  $sms->send(phone, message)
   │       │
   │       ├─ OK:    print msg-id, credits used, balance after
-  │       └─ ERROR: print description + action hint
+  │       └─ ERROR: print description and action hint
   │
   End
 ```
@@ -32,7 +32,7 @@ Start
 
 ## Step-by-Step
 
-### Step 1 — Create the client
+### Step 1: Create the client
 
 ```php
 $sms = KwtSMS::from_env();
@@ -40,10 +40,10 @@ $sms = KwtSMS::from_env();
 
 `from_env()` reads credentials in this order:
 
-1. `getenv()` — already-set system env vars (Docker, CI, server config)
+1. `getenv()`: already-set system env vars (Docker, CI, server config)
 2. `.env` file in the current working directory
 
-### Step 2 — Verify credentials
+### Step 2: Verify credentials
 
 ```php
 [$ok, $balance, $error] = $sms->verify();
@@ -53,11 +53,11 @@ Returns `[bool $ok, float $balance, string $error]`.
 
 Call `verify()` at startup in production to detect:
 
-- `ERR003` — wrong credentials
-- `ERR005` — account blocked
-- `ERR024` — server IP not in whitelist
+- `ERR003`: wrong credentials
+- `ERR005`: account blocked
+- `ERR024`: server IP not in whitelist
 
-### Step 3 — Send a single SMS
+### Step 3: Send a single SMS
 
 ```php
 $result = $sms->send('96598765432', 'Hello from kwtSMS!');
@@ -78,7 +78,7 @@ Phone numbers are normalized automatically:
 | `msg-id` | Save this for delivery status lookups |
 | `numbers` | Count of recipients accepted |
 | `points-charged` | Credits consumed |
-| `balance-after` | Remaining balance — save to avoid extra `/balance/` call |
+| `balance-after` | Remaining balance. Save to avoid extra `/balance/` calls. |
 
 ---
 

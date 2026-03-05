@@ -1,10 +1,10 @@
-# Example 06 — Message Cleaning
+# Example 06: Message Cleaning
 
 **File:** `examples/06-message-cleaning.php`
 **Run:** `php examples/06-message-cleaning.php`
 
 Understand what `clean_message()` strips from your text and why. This runs
-automatically inside `send()` — you never need to call it manually.
+automatically inside `send()`. You never need to call it manually.
 
 ---
 
@@ -37,16 +37,16 @@ Raw message text
 
 ## Why Each Category Matters
 
-**Emojis** — When an emoji is present, kwtSMS queues the message but never
+**Emojis:** When an emoji is present, kwtSMS queues the message but never
 dispatches it. The API returns `OK`, credits may be charged, and the message
 sits in the queue indefinitely with no error returned. `clean_message()` strips
 emojis before the API call entirely.
 
-**Hidden Unicode** — Text copied from Word, PDFs, WhatsApp, or CMS editors
+**Hidden Unicode:** Text copied from Word, PDFs, WhatsApp, or CMS editors
 embeds invisible characters (zero-width spaces, BOM, soft hyphens). These
 trigger spam filters or cause messages to get stuck in the queue.
 
-**Arabic/Hindi numerals** — OTP codes and amounts written as `١٢٣٤٥٦` may
+**Arabic/Hindi numerals:** OTP codes and amounts written as `١٢٣٤٥٦` may
 render inconsistently depending on handset locale. Converting to Latin `123456`
 ensures every recipient sees the same digits.
 

@@ -1,4 +1,4 @@
-# Example 09 — Production OTP Flow
+# Example 09: Production OTP Flow
 
 **File:** `examples/09-otp-production.php`
 **Run:** `php examples/09-otp-production.php`
@@ -51,7 +51,7 @@ and three interchangeable storage adapters (SQLite, MySQL, Redis).
 
 ## Setup
 
-### Step 1 — Register a Transactional SenderID
+### Step 1: Register a Transactional SenderID
 
 This is the most important step. Without it, OTP messages to DND numbers fail
 silently and credits are still charged.
@@ -63,7 +63,7 @@ silently and credits are still charged.
 
 Use `KWT-SMS` with test mode on while waiting for approval.
 
-### Step 2 — Generate APP_SECRET
+### Step 2: Generate APP_SECRET
 
 ```bash
 php -r "echo bin2hex(random_bytes(32)); echo PHP_EOL;"
@@ -76,7 +76,7 @@ APP_SECRET=a1b2c3d4e5f6...   # never commit this
 APP_NAME=MyApp
 ```
 
-### Step 3 — Choose a storage driver
+### Step 3: Choose a storage driver
 
 ```ini
 # SQLite (default — zero config, dev + small apps)
@@ -97,9 +97,9 @@ REDIS_PASSWORD=
 REDIS_DB=0
 ```
 
-### Step 4 — Choose a CAPTCHA provider
+### Step 4: Choose a CAPTCHA provider
 
-**Cloudflare Turnstile** (recommended — near-zero user friction, free):
+**Cloudflare Turnstile** (recommended: near-zero user friction, free):
 
 1. dash.cloudflare.com → Turnstile → Add site
 2. Copy Site Key → paste into your HTML form
@@ -117,13 +117,13 @@ CAPTCHA_PROVIDER=hcaptcha
 HCAPTCHA_SECRET=your_secret_key_here
 ```
 
-### Step 5 — Add the HTML form
+### Step 5: Add the HTML form
 
 Paste the CAPTCHA frontend snippet from the bottom of `09-otp-production.php`
 into your template. Replace `YOUR_CF_SITE_KEY` / `YOUR_HCAPTCHA_SITE_KEY` with
 the Site Key from Step 4.
 
-### Step 6 — Wire up HTTP routes
+### Step 6: Wire up HTTP routes
 
 Plain PHP:
 
@@ -168,7 +168,7 @@ class OtpController extends Controller {
 }
 ```
 
-### Step 7 — Run the CLI demo
+### Step 7: Run the CLI demo
 
 ```bash
 php examples/09-otp-production.php
@@ -179,7 +179,7 @@ Runs the full send → wrong code → correct code flow using SQLite and
 
 ---
 
-## Send OTP — Detailed Flow
+## Send OTP: Detailed Flow
 
 ```
 POST /otp/send  {"phone": "+965 9876 5432", "captcha_token": "xxxx"}
@@ -229,7 +229,7 @@ POST /otp/send  {"phone": "+965 9876 5432", "captcha_token": "xxxx"}
 
 ---
 
-## Verify OTP — Detailed Flow
+## Verify OTP: Detailed Flow
 
 ```
 POST /otp/verify  {"phone": "96598765432", "code": "042819"}

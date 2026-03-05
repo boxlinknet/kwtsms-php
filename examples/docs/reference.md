@@ -68,7 +68,7 @@ still deducted.
 | ERR010 | send | Zero balance | Recharge at kwtsms.com |
 | ERR011 | send | Insufficient balance | Recharge at kwtsms.com |
 | ERR012 | send | Message too long (>7 pages) | Shorten the message |
-| ERR013 | send | Send queue full (1000 msgs) | Retry after 30s — library handles in bulk |
+| ERR013 | send | Send queue full (1000 msgs) | Retry after 30s. Library handles in bulk sends automatically. |
 | ERR019–023 | dlr | Delivery report issues | See API docs |
 | ERR024 | All | IP not in whitelist | Add server IP at kwtsms.com → API → IP Lockdown |
 | ERR025 | send | Invalid number format | Strip non-digits, remove + or 00 prefix |
@@ -87,7 +87,7 @@ still deducted.
 
 ### Credentials & Configuration
 
-- [ ] Using API username/password — not your website login
+- [ ] Using API username/password, not your website login
 - [ ] `KWTSMS_TEST_MODE=0` set in production `.env`
 - [ ] Registered a private Transactional SenderID (required for OTP)
 - [ ] `APP_SECRET` set to a 32+ character random value, not committed to git
@@ -104,7 +104,7 @@ still deducted.
 ### Security
 
 - [ ] OTP codes stored as HMAC hash, not plaintext
-- [ ] Comparison uses `hash_equals()` — not `==` or `===`
+- [ ] Comparison uses `hash_equals()`, not `==` or `===`
 - [ ] Brute-force protection: max 5 attempts per code
 - [ ] Rate limiting: per phone and per IP
 - [ ] CAPTCHA enforced on OTP send endpoint
@@ -123,7 +123,7 @@ still deducted.
 - [ ] `msg-id` saved from every successful send response
 - [ ] `balance-after` saved from every successful send response
 - [ ] Low-balance alert configured (notify admin when balance drops below threshold)
-- [ ] Error logging in place — never log OTP codes or full phone numbers
+- [ ] Error logging in place. Never log OTP codes or full phone numbers.
 - [ ] End-to-end tested in test mode before switching to live
 
 ### Anti-Abuse

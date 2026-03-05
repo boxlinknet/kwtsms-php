@@ -1,4 +1,4 @@
-# Example 02 — OTP (Basic)
+# Example 02: OTP (Basic)
 
 **File:** `examples/02-otp.php`
 **Run:** `php examples/02-otp.php`
@@ -24,7 +24,7 @@ User requests OTP
   │       │
   │       ├─ OK:    return {success, otp, msg_id}
   │       │           Store otp in session/cache for verification
-  │       └─ ERROR: map error code → user-safe message
+  │       └─ ERROR: map error code to user-safe message
   │                  log real error internally
   End
 ```
@@ -42,12 +42,12 @@ function generate_otp(int $digits = 6): string
 }
 ```
 
-- `random_int()` uses a CSPRNG — never use `rand()` or `mt_rand()`
-- `str_pad()` ensures leading zeros: `42` → `"000042"`
+- `random_int()` uses a CSPRNG. Never use `rand()` or `mt_rand()`.
+- `str_pad()` ensures leading zeros: `42` becomes `"000042"`.
 
 ### Mapping errors to user-safe messages
 
-Never expose raw API error codes to end users — they reveal your infrastructure.
+Never expose raw API error codes to end users. They reveal your infrastructure.
 
 ```php
 switch ($result['code']) {
@@ -62,7 +62,7 @@ switch ($result['code']) {
 ### Storing the OTP for verification
 
 ```php
-// Session (simplest — single server, short-lived)
+// Session (simplest: single server, short-lived)
 $_SESSION['otp']        = $otp;
 $_SESSION['otp_phone']  = $phone;
 $_SESSION['otp_expiry'] = time() + 600;
@@ -70,15 +70,15 @@ $_SESSION['otp_expiry'] = time() + 600;
 // Laravel cache
 cache()->put('otp_' . $phone, $otp, now()->addMinutes(10));
 
-// Database — store HMAC hash, never plaintext (see Example 09)
+// Database: store HMAC hash, never plaintext (see Example 09)
 ```
 
 ---
 
 ## Key Rules
 
-- **Transactional SenderID required** — Promotional SenderIDs are silently blocked
+- **Transactional SenderID required.** Promotional SenderIDs are silently blocked
   on DND numbers. Credits are still charged. See [reference](reference.md#sender-id).
-- **Include your app name** in the message: `"Your APPNAME code is: 123456"` — telecom requirement
-- **Never return the OTP code** in your HTTP response — it travels only via SMS
-- **Never show raw API error codes** to users
+- **Include your app name** in the message: `"Your APPNAME code is: 123456"`. Telecom requirement.
+- **Never return the OTP code** in your HTTP response. It travels only via SMS.
+- **Never show raw API error codes** to users.

@@ -22,7 +22,7 @@ Desktop.ini
 
 # Local config and memory (not committed)
 CLAUDE.md
-/.claude/
+.claude/
 
 # GitHub Actions and workflows (local only)
 /.github/
