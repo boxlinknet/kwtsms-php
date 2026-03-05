@@ -1,5 +1,11 @@
 # kwtsms/kwtsms
 
+[![Latest Version](https://img.shields.io/packagist/v/kwtsms/kwtsms.svg?style=flat-square)](https://packagist.org/packages/kwtsms/kwtsms)
+[![Total Downloads](https://img.shields.io/packagist/dt/kwtsms/kwtsms.svg?style=flat-square)](https://packagist.org/packages/kwtsms/kwtsms)
+[![PHP Version](https://img.shields.io/packagist/php-v/kwtsms/kwtsms.svg?style=flat-square)](https://packagist.org/packages/kwtsms/kwtsms)
+[![License](https://img.shields.io/packagist/l/kwtsms/kwtsms.svg?style=flat-square)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/boxlinknet/kwtsms-php/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/boxlinknet/kwtsms-php/actions/workflows/ci.yml)
+
 kwtSMS API Client for PHP. Official library to interface with the Kuwait SMS gateway (kwtsms.com).
 
 ---
