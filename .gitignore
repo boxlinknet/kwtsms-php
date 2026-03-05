@@ -1,0 +1,23 @@
+/vendor/
+/.phpunit.cache/
+/.php-cs-fixer.cache/
+.phpunit.result.cache
+
+# Credentials and logs, never commit these
+.env
+*.env
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.DS_Store
+
+# Claude Code config (local only)
+CLAUDE.md
+
+# Internal docs and planning (local only)
+/docs/
+
+# Tests (local only, not published to registry or GitHub)
+/tests/
