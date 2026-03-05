@@ -703,6 +703,112 @@ class KwtSMSClientTest extends TestCase
     }
 
     // -----------------------------------------------------------------------
+    // status()
+    // -----------------------------------------------------------------------
+
+    public function testStatusReturnsOkResponse(): void
+    {
+        $this->client->mockResponses = [
+            ['result' => 'OK', 'status' => 'sent', 'description' => 'Message successfully sent to gateway'],
+        ];
+
+        $result = $this->client->status('abc123');
+
+        $this->assertSame('OK', $result['result']);
+        $this->assertSame('sent', $result['status']);
+        $this->assertSame('Message successfully sent to gateway', $result['description']);
+    }
+
+    public function testStatusCallsCorrectEndpointWithMsgId(): void
+    {
+        $result = $this->client->status('myMsgId999');
+
+        $this->assertCount(1, $this->client->calls);
+        $this->assertSame('status', $this->client->calls[0]['endpoint']);
+        $this->assertSame('myMsgId999', $this->client->calls[0]['payload']['msgid']);
+    }
+
+    public function testStatusOnErr029MessageNotFound(): void
+    {
+        $this->client->mockResponses = [
+            ['result' => 'ERROR', 'code' => 'ERR029', 'description' => 'Message does not exist'],
+        ];
+
+        $result = $this->client->status('bad-id');
+
+        $this->assertSame('ERROR', $result['result']);
+        $this->assertSame('ERR029', $result['code']);
+        $this->assertArrayHasKey('action', $result);
+    }
+
+    public function testStatusOnErr030MessageStuckInQueue(): void
+    {
+        $this->client->mockResponses = [
+            ['result' => 'ERROR', 'code' => 'ERR030', 'description' => 'Message stuck in queue'],
+        ];
+
+        $result = $this->client->status('stuck-id');
+
+        $this->assertSame('ERROR', $result['result']);
+        $this->assertSame('ERR030', $result['code']);
+        $this->assertStringContainsString('Queue', $result['action']);
+    }
+
+    // -----------------------------------------------------------------------
+    // dlr()
+    // -----------------------------------------------------------------------
+
+    public function testDlrReturnsOkWithReport(): void
+    {
+        $this->client->mockResponses = [
+            ['result' => 'OK', 'report' => [['Number' => '96598765432', 'Status' => 'Received by recipient']]],
+        ];
+
+        $result = $this->client->dlr('abc123');
+
+        $this->assertSame('OK', $result['result']);
+        $this->assertArrayHasKey('report', $result);
+        $this->assertCount(1, $result['report']);
+        $this->assertSame('96598765432', $result['report'][0]['Number']);
+        $this->assertSame('Received by recipient', $result['report'][0]['Status']);
+    }
+
+    public function testDlrCallsCorrectEndpointWithMsgId(): void
+    {
+        $result = $this->client->dlr('myMsgId999');
+
+        $this->assertCount(1, $this->client->calls);
+        $this->assertSame('dlr', $this->client->calls[0]['endpoint']);
+        $this->assertSame('myMsgId999', $this->client->calls[0]['payload']['msgid']);
+    }
+
+    public function testDlrOnErr019NoReportsFound(): void
+    {
+        $this->client->mockResponses = [
+            ['result' => 'ERROR', 'code' => 'ERR019', 'description' => 'No delivery reports found'],
+        ];
+
+        $result = $this->client->dlr('no-report-id');
+
+        $this->assertSame('ERROR', $result['result']);
+        $this->assertSame('ERR019', $result['code']);
+        $this->assertArrayHasKey('action', $result);
+    }
+
+    public function testDlrOnErr021NotAvailableYet(): void
+    {
+        $this->client->mockResponses = [
+            ['result' => 'ERROR', 'code' => 'ERR021', 'description' => 'No delivery report available yet'],
+        ];
+
+        $result = $this->client->dlr('pending-id');
+
+        $this->assertSame('ERROR', $result['result']);
+        $this->assertSame('ERR021', $result['code']);
+        $this->assertStringContainsString('later', $result['action']);
+    }
+
+    // -----------------------------------------------------------------------
     // .env parser edge cases
     // -----------------------------------------------------------------------
 
