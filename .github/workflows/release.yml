@@ -6,8 +6,44 @@ on:
       - 'v*'
 
 jobs:
+  verify:
+    name: Verify (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        php: ['7.4', '8.1', '8.2', '8.3', '8.4']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, json
+          coverage: none
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+          restore-keys: php-${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Run tests
+        run: vendor/bin/phpunit --testdox
+
+      - name: PHPStan
+        if: matrix.php == '8.3'
+        run: vendor/bin/phpstan analyse src tests --level=8
+
   release:
     name: Create GitHub Release
+    needs: verify
     runs-on: ubuntu-latest
     permissions:
       contents: write
