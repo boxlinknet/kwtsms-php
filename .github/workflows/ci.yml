@@ -32,8 +32,16 @@ jobs:
           key: php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
           restore-keys: php-${{ matrix.php }}-composer-
 
+      - name: Validate composer.json
+        if: matrix.php == '8.3'
+        run: composer validate --strict
+
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Audit dependencies
+        if: matrix.php == '8.3'
+        run: composer audit
 
       - name: Run tests
         run: vendor/bin/phpunit --testdox
