@@ -37,3 +37,11 @@ jobs:
 
       - name: Run tests
         run: vendor/bin/phpunit --testdox
+
+      - name: PHPStan
+        if: matrix.php == '8.3'
+        run: vendor/bin/phpstan analyse src tests --level=8
+
+      - name: Check code style
+        if: matrix.php == '8.3'
+        run: vendor/bin/php-cs-fixer fix src tests --dry-run --diff
