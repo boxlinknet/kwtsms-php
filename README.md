@@ -1,4 +1,4 @@
-# kwtsms/kwtsms
+# kwtSMS PHP Client
 
 [![Latest Version](https://img.shields.io/packagist/v/kwtsms/kwtsms.svg?style=flat-square)](https://packagist.org/packages/kwtsms/kwtsms)
 [![Total Downloads](https://img.shields.io/packagist/dt/kwtsms/kwtsms.svg?style=flat-square)](https://packagist.org/packages/kwtsms/kwtsms)
