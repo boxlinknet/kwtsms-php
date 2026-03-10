@@ -62,7 +62,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `composer.lock` removed from version control. Library convention: consumers
   use their own lock files and Composer ignores the library lock file on install.
 - `.gitignore`: added OS files (`Thumbs.db`, `Desktop.ini`), editor swap files
-  (`*.swp`, `*.swo`), `.claude/ (local config)` (local config), and `/.github/`.
+  (`*.swp`, `*.swo`), local config dir, and `/.github/`.
 
 ### Fixed
 - `--sender` flag in `bin/kwtsms` correctly errors if no value is provided,
