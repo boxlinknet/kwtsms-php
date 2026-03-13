@@ -33,6 +33,20 @@ class MessageUtils
      */
     public static function clean_message(string $text): string
     {
+        // 0. Strip any invalid UTF-8 byte sequences before applying /u patterns.
+        //    Uses PCRE (*SKIP)(*FAIL) to preserve valid 1-4 byte sequences and
+        //    strip any remaining high bytes that do not form valid UTF-8.
+        //    Runs without the /u flag so it safely handles malformed input.
+        $text = (string) preg_replace(
+            '/[\x00-\x7F](*SKIP)(*FAIL)'
+            . '|[\xC2-\xDF][\x80-\xBF](*SKIP)(*FAIL)'
+            . '|[\xE0-\xEF][\x80-\xBF]{2}(*SKIP)(*FAIL)'
+            . '|[\xF0-\xF7][\x80-\xBF]{3}(*SKIP)(*FAIL)'
+            . '|[\x80-\xFF]/s',
+            '',
+            $text
+        );
+
         // 1. Strip HTML tags
         $text = strip_tags($text);
 
