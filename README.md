@@ -414,24 +414,7 @@ Never expose raw `ERR0XX` codes to end users.
 
 ## CLI
 
-Send SMS and verify credentials from the terminal:
-
-```bash
-# Verify credentials and check balance
-vendor/bin/kwtsms verify
-
-# Send a message
-vendor/bin/kwtsms send --phone 96598765432 --message "Hello from kwtSMS"
-
-# Override sender ID for this message
-vendor/bin/kwtsms send --phone 96598765432 --message "Hello" --sender MY-BRAND
-
-# Help
-vendor/bin/kwtsms --help
-```
-
-Reads `KWTSMS_USERNAME`, `KWTSMS_PASSWORD`, `KWTSMS_SENDER_ID`, and `KWTSMS_TEST_MODE`
-from `.env` or shell environment.
+The CLI tool has moved to a dedicated package: **[kwtsms-cli](https://github.com/boxlinknet/kwtsms-cli)**
 
 ---
 

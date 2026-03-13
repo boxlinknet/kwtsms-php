@@ -33,9 +33,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [1.1.0] 2026-03-05
 
 ### Added
-- `bin/kwtsms` CLI tool: send SMS and verify credentials from the terminal.
-  Supports `send` (with `--phone`, `--message`, `--sender`) and `verify` commands.
-  Reads credentials from `.env` or shell environment.
 - `examples/09-otp-production.php`: complete drop-in production OTP implementation
   with three storage adapters (SQLite, MySQL, Redis), two CAPTCHA providers
   (Cloudflare Turnstile, hCaptcha), per-phone and per-IP rate limiting,
@@ -64,9 +61,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `.gitignore`: added OS files (`Thumbs.db`, `Desktop.ini`), editor swap files
   (`*.swp`, `*.swo`), local config dir, and `/.github/`.
 
-### Fixed
-- `--sender` flag in `bin/kwtsms` correctly errors if no value is provided,
-  preventing the next flag from being silently consumed as the sender ID.
+### Removed
+- `bin/kwtsms` CLI tool extracted to [kwtsms-cli](https://github.com/boxlinknet/kwtsms-cli).
 
 ---
 

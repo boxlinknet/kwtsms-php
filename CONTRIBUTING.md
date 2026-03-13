@@ -192,8 +192,7 @@ Examples:
 
 ```
 fix(message-utils): extend emoji Unicode range to cover country flags and tags block
-feat(cli): add bin/kwtsms send and verify commands
-docs(readme): document purchased() method and CLI usage
+docs(readme): document purchased() method
 test(client): add mocked bulk-send and ERR009 emoji-only tests
 ```
 
