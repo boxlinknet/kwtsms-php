@@ -330,10 +330,21 @@ Validation steps (in order):
 
 1. Empty check
 2. Email detection (`@` present)
-3. Arabic/Hindi digit conversion
-4. Non-digit stripping (`+`, spaces, dashes, parentheses, etc.)
-5. Leading zero stripping
+3. Arabic/Hindi digit conversion + non-digit stripping
+4. Leading zero stripping
+5. Local trunk digit `0` stripped when country code is matched (e.g. `966 055...` → `966 55...`)
 6. Length check: 7–15 digits
+7. Country-specific format check: local digit count and mobile starting digit (60+ countries via `PHONE_RULES`). Unknown country codes pass with length-only validation.
+
+### `PhoneUtils::find_country_code()` / `PhoneUtils::validate_phone_format()`
+
+Lower-level helpers used internally by `validate_phone_input()`. Useful if you need to inspect the country code or run format checks independently.
+
+```php
+$cc    = PhoneUtils::find_country_code('96598765432'); // "965"
+[$ok, $err] = PhoneUtils::validate_phone_format('96598765432'); // [true, null]
+[$ok, $err] = PhoneUtils::validate_phone_format('96510000000'); // [false, "Invalid Kuwait mobile number: ..."]
+```
 
 ### `PhoneUtils::normalize_phone()`
 
@@ -357,6 +368,7 @@ What it strips and why:
 
 | Step | What | Why |
 |------|------|-----|
+| 0 | Invalid UTF-8 byte sequences stripped | Prevents silent `json_encode` failure (ERR999) on malformed input |
 | 1 | HTML tags | Prevents ERR027 |
 | 2 | Arabic/Hindi digits converted to Latin | OTP codes render consistently on all handsets |
 | 3 | Hidden Unicode (U+200B zero-width space, U+FEFF BOM, U+00AD soft hyphen, etc.) | Common in copy-pasted text from Word/PDFs; causes spam filter rejection |
@@ -378,8 +390,9 @@ The library normalizes all of these automatically:
 | `(965) 9876-5432` | `96598765432` |
 | `٩٦٥٩٨٧٦٥٤٣٢` (Arabic-Indic) | `96598765432` |
 | `۹۶۵۹۸۷۶۵۴۳۲` (Extended Arabic-Indic) | `96598765432` |
+| `966 055 123 4567` (Saudi with trunk 0) | `966551234567` |
 
-Rejected inputs: email addresses, empty strings, fewer than 7 digits, more than 15 digits.
+Rejected inputs: email addresses, empty strings, fewer than 7 digits, more than 15 digits, numbers that don't match their country's digit length or mobile prefix rules.
 
 ---
 

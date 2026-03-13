@@ -9,6 +9,44 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Fixed
+- `KWTSMS_TEST_MODE=false` in `.env` or env no longer silently enables test mode.
+  The old `(bool)'false' === true` coercion is replaced by an explicit allowlist
+  (`1`, `true`, `yes`, case-insensitive).
+- `KWTSMS_LOG_FILE=` (empty string) in `from_env()` now correctly disables logging
+  as documented. Previously the `?:` fallback defaulted to `kwtsms.log`.
+- `MessageUtils::clean_message()` now strips invalid UTF-8 byte sequences before
+  applying `/u` regex patterns. Previously malformed UTF-8 silently fell through
+  and caused `json_encode` to return `ERR999` at send time.
+
+### Changed
+- `send_bulk()` calls `set_time_limit(0)` at entry. Bulk sends with ERR013 backoff
+  can exceed PHP's default 30-second execution limit mid-batch.
+
+---
+
+## [1.4.0] 2026-03-13
+
+### Removed
+- `bin/kwtsms` CLI tool extracted to [kwtsms-cli](https://github.com/boxlinknet/kwtsms-cli).
+  Remove the `"bin"` entry from `composer.json`; `vendor/bin/kwtsms` is no longer installed.
+
+---
+
+## [1.3.0] 2026-03-13
+
+### Added
+- `PhoneUtils::PHONE_RULES`: country-specific validation rules for 60+ countries
+  (local digit length and mobile starting digit). Ported from kwtsms-shopify.
+- `PhoneUtils::find_country_code()`: longest-match (3 > 2 > 1 digit) country code
+  lookup against `PHONE_RULES`.
+- `PhoneUtils::validate_phone_format()`: validates local digit count and mobile
+  prefix against country rules. Unknown country codes pass through with generic
+  E.164 length-only validation.
+- `PhoneUtils::COUNTRY_NAMES`: human-readable names used in error messages.
+- Trunk digit stripping in `validate_phone_input()`: local `0` prefix is removed
+  after country code match (e.g. `966 055 123 4567` → `966551234567`).
+
 ---
 
 ## [1.2.0] 2026-03-05
@@ -115,13 +153,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 | Version | Date | PHP | Notable Change |
 |---------|------|-----|----------------|
+| 1.4.0 | 2026-03-13 | 7.4+ | CLI tool moved to kwtsms-cli |
+| 1.3.0 | 2026-03-13 | 7.4+ | Country-specific phone validation (60+ countries), trunk-zero stripping |
 | 1.2.0 | 2026-03-05 | 7.4+ | status(), dlr(), CI, badges, SECURITY.md |
-| 1.1.0 | 2026-03-05 | 7.4+ | CLI tool, production OTP example, extended emoji ranges |
+| 1.1.0 | 2026-03-05 | 7.4+ | Production OTP example, extended emoji ranges |
 | 1.0.0 | 2026-03-05 | 7.4+ | Initial release |
 
 ---
 
-[Unreleased]: https://github.com/boxlinknet/kwtsms-php/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/boxlinknet/kwtsms-php/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/boxlinknet/kwtsms-php/releases/tag/v1.0.0
