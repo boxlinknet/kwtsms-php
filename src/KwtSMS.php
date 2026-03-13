@@ -117,8 +117,17 @@ class KwtSMS
         $username = getenv('KWTSMS_USERNAME') ?: ($_ENV['KWTSMS_USERNAME'] ?? '');
         $password = getenv('KWTSMS_PASSWORD') ?: ($_ENV['KWTSMS_PASSWORD'] ?? '');
         $sender = getenv('KWTSMS_SENDER_ID') ?: ($_ENV['KWTSMS_SENDER_ID'] ?? 'KWT-SMS');
-        $test_mode = (bool) (getenv('KWTSMS_TEST_MODE') ?: ($_ENV['KWTSMS_TEST_MODE'] ?? false));
-        $log_file = getenv('KWTSMS_LOG_FILE') ?: ($_ENV['KWTSMS_LOG_FILE'] ?? 'kwtsms.log');
+        $raw_test = getenv('KWTSMS_TEST_MODE');
+        if ($raw_test === false) {
+            $raw_test = (string) ($_ENV['KWTSMS_TEST_MODE'] ?? '');
+        }
+        $test_mode = in_array(strtolower($raw_test), ['1', 'true', 'yes'], true);
+
+        $raw_log = getenv('KWTSMS_LOG_FILE');
+        if ($raw_log === false) {
+            $raw_log = $_ENV['KWTSMS_LOG_FILE'] ?? 'kwtsms.log';
+        }
+        $log_file = ($raw_log === '') ? '' : (string) $raw_log;
 
         return new self((string) $username, (string) $password, (string) $sender, $test_mode, (string) $log_file);
     }
@@ -309,6 +318,10 @@ class KwtSMS
      */
     private function send_bulk(array $valid, array $invalid, string $message, ?string $sender): array
     {
+        // Bulk sends with ERR013 backoff can run for several minutes. Raise the
+        // execution limit so PHP does not kill the process mid-batch.
+        set_time_limit(0);
+
         $batches = array_chunk($valid, 200);
 
         $aggregated = [

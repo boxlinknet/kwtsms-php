@@ -94,22 +94,22 @@ class PhoneUtils
         '39'  => ['localLengths' => [10], 'mobileStartDigits' => ['3']],                      // Italy
         '34'  => ['localLengths' => [9], 'mobileStartDigits' => ['6', '7']],                  // Spain
         '31'  => ['localLengths' => [9], 'mobileStartDigits' => ['6']],                       // Netherlands
-        '32'  => ['localLengths' => [9]],                                                      // Belgium
+        '32'  => ['localLengths' => [9]],                                                      // Belgium: mobile/fixed share number space; length-only intentional
         '41'  => ['localLengths' => [9], 'mobileStartDigits' => ['7']],                       // Switzerland
         '43'  => ['localLengths' => [10], 'mobileStartDigits' => ['6']],                      // Austria
         '47'  => ['localLengths' => [8], 'mobileStartDigits' => ['4', '9']],                  // Norway
-        '48'  => ['localLengths' => [9]],                                                      // Poland
+        '48'  => ['localLengths' => [9]],                                                      // Poland: complex prefix allocation; length-only intentional
         '30'  => ['localLengths' => [10], 'mobileStartDigits' => ['6']],                      // Greece
         '420' => ['localLengths' => [9], 'mobileStartDigits' => ['6', '7']],                  // Czech Republic
         '46'  => ['localLengths' => [9], 'mobileStartDigits' => ['7']],                       // Sweden
-        '45'  => ['localLengths' => [8]],                                                      // Denmark
+        '45'  => ['localLengths' => [8]],                                                      // Denmark: complex prefix allocation; length-only intentional
         '40'  => ['localLengths' => [9], 'mobileStartDigits' => ['7']],                       // Romania
-        '36'  => ['localLengths' => [9]],                                                      // Hungary
-        '380' => ['localLengths' => [9]],                                                      // Ukraine
+        '36'  => ['localLengths' => [9]],                                                      // Hungary: complex prefix allocation; length-only intentional
+        '380' => ['localLengths' => [9]],                                                      // Ukraine: complex prefix allocation; length-only intentional
         // === Americas ===
-        '1'   => ['localLengths' => [10]],                                                     // USA/Canada
-        '52'  => ['localLengths' => [10]],                                                     // Mexico
-        '55'  => ['localLengths' => [11]],                                                     // Brazil
+        '1'   => ['localLengths' => [10]],                                                     // USA/Canada: no mobile-specific prefix; length-only intentional
+        '52'  => ['localLengths' => [10]],                                                     // Mexico: mobile/fixed unified since 2019; length-only intentional
+        '55'  => ['localLengths' => [11]],                                                     // Brazil: area code + 9 + subscriber; length-only intentional
         '57'  => ['localLengths' => [10], 'mobileStartDigits' => ['3']],                      // Colombia
         '54'  => ['localLengths' => [10], 'mobileStartDigits' => ['9']],                      // Argentina
         '56'  => ['localLengths' => [9], 'mobileStartDigits' => ['9']],                       // Chile
@@ -126,7 +126,7 @@ class PhoneUtils
         '255' => ['localLengths' => [9], 'mobileStartDigits' => ['6', '7']],                  // Tanzania
         '256' => ['localLengths' => [9], 'mobileStartDigits' => ['7']],                       // Uganda
         '237' => ['localLengths' => [9], 'mobileStartDigits' => ['6']],                       // Cameroon
-        '225' => ['localLengths' => [10]],                                                     // Ivory Coast
+        '225' => ['localLengths' => [10]],                                                     // Ivory Coast: 01/05/07 prefix system; length-only intentional
         '221' => ['localLengths' => [9], 'mobileStartDigits' => ['7']],                       // Senegal
         '252' => ['localLengths' => [9], 'mobileStartDigits' => ['6', '7']],                  // Somalia
         '250' => ['localLengths' => [9], 'mobileStartDigits' => ['7']],                       // Rwanda
