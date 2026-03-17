@@ -6,7 +6,7 @@ class ApiErrors
 {
     /**
      * Map of kwtSMS error codes to developer-friendly descriptions and action messages.
-     * 
+     *
      * @var array<string, array{description: string, action: string}>
      */
     public const ERRORS = [
@@ -55,7 +55,7 @@ class ApiErrors
             'action' => 'Buy more credits at kwtsms.com.',
         ],
         'ERR012' => [
-            'description' => 'Message is too long (over 6 SMS pages).',
+            'description' => 'Message is too long (over 7 SMS pages).',
             'action' => 'Shorten your message.',
         ],
         'ERR013' => [
@@ -137,7 +137,7 @@ class ApiErrors
     public static function enrichError(array $response): array
     {
         $code = isset($response['code']) ? (string) $response['code'] : 'ERR999';
-        
+
         // If the API didn't return a description, attempt to get our own translation
         if (!isset($response['description']) && isset(self::ERRORS[$code])) {
             $response['description'] = self::ERRORS[$code]['description'];

@@ -162,7 +162,7 @@ class KwtSMS
         curl_setopt($ch, CURLOPT_TIMEOUT, 15);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
-            'Accept: application/json'
+            'Accept: application/json',
         ]);
 
         // Critical: Do NOT use CURLOPT_FAILONERROR because we *need* the 4xx/5xx body for API errors!
@@ -176,7 +176,7 @@ class KwtSMS
             $err = [
                 'result' => 'ERROR',
                 'code' => 'ERR999',
-                'description' => $error ? 'Network error: ' . $error : 'Empty response from API'
+                'description' => $error ? 'Network error: ' . $error : 'Empty response from API',
             ];
             $this->log($endpoint, $payload, $err, false, $err['description']);
             return ApiErrors::enrichError($err);
@@ -189,7 +189,7 @@ class KwtSMS
             $err = [
                 'result' => 'ERROR',
                 'code' => 'ERR999',
-                'description' => 'Invalid JSON from API. HTTP Code: ' . $httpCode
+                'description' => 'Invalid JSON from API. HTTP Code: ' . $httpCode,
             ];
             $this->log($endpoint, $payload, $err, false, 'Invalid JSON from API');
             return ApiErrors::enrichError($err);
@@ -229,7 +229,7 @@ class KwtSMS
             'request' => $maskedPayload,
             'response' => $response,
             'ok' => $ok,
-            'error' => $error
+            'error' => $error,
         ];
 
         $jsonLine = json_encode($entry) . "\n";
@@ -335,7 +335,7 @@ class KwtSMS
             'points-charged' => 0.0,
             'balance-after' => null,
             'errors' => [],
-            'invalid' => $invalid
+            'invalid' => $invalid,
         ];
 
         $hasError = false;
@@ -356,7 +356,7 @@ class KwtSMS
                     'mobile' => $batchStr,
                     'message' => $message,
                     'sender' => $this->active_sender($sender),
-                    'test' => $this->test_mode ? 1 : 0
+                    'test' => $this->test_mode ? 1 : 0,
                 ];
 
                 $response = $this->post('send', $payload);
@@ -375,18 +375,21 @@ class KwtSMS
 
             if (isset($response['result']) && $response['result'] === 'OK') {
                 $hasSuccess = true;
-                if (isset($response['msg-id']))
+                if (isset($response['msg-id'])) {
                     $aggregated['msg-ids'][] = $response['msg-id'];
-                if (isset($response['points-charged']))
+                }
+                if (isset($response['points-charged'])) {
                     $aggregated['points-charged'] += (float) $response['points-charged'];
-                if (isset($response['balance-after']))
+                }
+                if (isset($response['balance-after'])) {
                     $aggregated['balance-after'] = (float) $response['balance-after'];
+                }
             } else {
                 $hasError = true;
                 $errEntry = [
                     'batch' => $index + 1,
                     'code' => $response['code'] ?? 'ERR999',
-                    'description' => $response['description'] ?? 'Unknown Error'
+                    'description' => $response['description'] ?? 'Unknown Error',
                 ];
                 $aggregated['errors'][] = $errEntry;
             }
@@ -444,13 +447,13 @@ class KwtSMS
         $valid_list = [];
 
         foreach ($raw_numbers as $phone) {
-            list($isValid, $errMsg, $normalized) = PhoneUtils::validate_phone_input($phone);
+            [$isValid, $errMsg, $normalized] = PhoneUtils::validate_phone_input($phone);
 
             $validation_results[] = [
                 'phone' => $phone,
                 'valid' => $isValid,
                 'error' => $errMsg,
-                'normalized' => $normalized
+                'normalized' => $normalized,
             ];
 
             if ($isValid) {
@@ -460,7 +463,7 @@ class KwtSMS
                 $er++;
                 $rejected[] = [
                     'number' => $phone,
-                    'error' => $errMsg
+                    'error' => $errMsg,
                 ];
             }
         }
@@ -486,6 +489,15 @@ class KwtSMS
      */
     public function send($mobile, string $message, ?string $sender = null): array
     {
+        if ($this->username === '' || $this->password === '') {
+            return ApiErrors::enrichError([
+                'result' => 'ERROR',
+                'code' => 'ERR003',
+                'description' => 'Missing API credentials.',
+                'action' => 'Check KWTSMS_USERNAME and KWTSMS_PASSWORD. These are your API credentials, not your account mobile number.',
+            ]);
+        }
+
         $validation = $this->validate($mobile);
         $valid_list = $validation['_valid_list'];
         $rejected = $validation['rejected'];
@@ -500,7 +512,7 @@ class KwtSMS
                 'result' => 'ERROR',
                 'code' => 'ERR006',
                 'description' => 'No valid phone numbers.',
-                'invalid' => $rejected
+                'invalid' => $rejected,
             ]);
         }
 
@@ -529,7 +541,7 @@ class KwtSMS
                 'mobile' => implode(',', $valid_list),
                 'message' => $cleaned_message,
                 'sender' => $this->active_sender($sender),
-                'test' => $this->test_mode ? 1 : 0
+                'test' => $this->test_mode ? 1 : 0,
             ];
 
             $response = $this->post('send', $payload);

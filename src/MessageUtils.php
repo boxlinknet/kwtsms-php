@@ -79,7 +79,7 @@ class MessageUtils
 
         // 5. Remove remaining control characters EXCEPT \n, \r, and \t
         // We do this by targeting ASCII control chars directly (0x00 to 0x1F, except 0x09, 0x0A, 0x0D)
-        // and 0x7F (Delete). 
+        // and 0x7F (Delete).
         $text = preg_replace('/[\x{00}-\x{08}\x{0B}\x{0C}\x{0E}-\x{1F}\x{7F}]/u', '', $text) ?? $text;
 
         return $text;

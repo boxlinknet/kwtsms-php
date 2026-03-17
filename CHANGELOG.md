@@ -9,6 +9,20 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+---
+
+## [1.6.0] 2026-03-17
+
+### Added
+- `send()` now returns ERR003 immediately if `username` or `password` is empty, without making an API call.
+
+### Fixed
+- ERR012 description corrected to "over 7 SMS pages" (was "over 6"). Confirmed via live API: 7-page messages (1071 GSM / 469 UCS-2 chars) succeed; 8-page messages fail.
+
+---
+
+## [1.5.0] 2026-03-13
+
 ### Fixed
 - `KWTSMS_TEST_MODE=false` in `.env` or env no longer silently enables test mode.
   The old `(bool)'false' === true` coercion is replaced by an explicit allowlist
@@ -99,9 +113,6 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - `.gitignore`: added OS files (`Thumbs.db`, `Desktop.ini`), editor swap files
   (`*.swp`, `*.swo`), local config dir, and `/.github/`.
 
-### Removed
-- `bin/kwtsms` CLI tool extracted to [kwtsms-cli](https://github.com/boxlinknet/kwtsms-cli).
-
 ---
 
 ## [1.0.0] 2026-03-05
@@ -153,6 +164,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 | Version | Date | PHP | Notable Change |
 |---------|------|-----|----------------|
+| 1.6.0 | 2026-03-17 | 7.4+ | Early credential check in send(), ERR012 page-limit correction |
+| 1.5.0 | 2026-03-13 | 7.4+ | Security fixes: TEST_MODE coercion, LOG_FILE empty-disable, UTF-8 sanitization, set_time_limit(0) |
 | 1.4.0 | 2026-03-13 | 7.4+ | CLI tool moved to kwtsms-cli |
 | 1.3.0 | 2026-03-13 | 7.4+ | Country-specific phone validation (60+ countries), trunk-zero stripping |
 | 1.2.0 | 2026-03-05 | 7.4+ | status(), dlr(), CI, badges, SECURITY.md |
@@ -161,7 +174,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-[Unreleased]: https://github.com/boxlinknet/kwtsms-php/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/boxlinknet/kwtsms-php/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.1.0...v1.2.0
