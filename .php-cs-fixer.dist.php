@@ -12,6 +12,6 @@ return (new Config())
     ])
     ->setFinder(
         (new Finder())
-            ->in([__DIR__ . '/src', __DIR__ . '/tests'])
+            ->in(__DIR__ . '/src')
     )
 ;
