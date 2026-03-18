@@ -22,7 +22,7 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.40",
+        "friendsofphp/php-cs-fixer": "^3.65",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.6"
     },
@@ -39,7 +39,7 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "phpstan": "vendor/bin/phpstan analyse src tests",
-        "format": "vendor/bin/php-cs-fixer fix src tests"
+        "format": "vendor/bin/php-cs-fixer fix src"
     },
     "config": {
         "sort-packages": true
