@@ -1,5 +1,5 @@
 {
-    "name": "kwtsms/kwtsms",
+    "name": "kwtsms/kwtsms-php",
     "description": "kwtSMS API Client for PHP. Official library to interface with the Kuwait SMS gateway (kwtsms.com)",
     "type": "library",
     "keywords": ["kwtsms", "sms", "kuwait", "sms-gateway", "otp", "notification", "messaging"],

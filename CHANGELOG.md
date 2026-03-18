@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `kwtsms/kwtsms` are documented in this file.
+All notable changes to `kwtsms/kwtsms-php` are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -8,6 +8,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ---
 
 ## [Unreleased]
+
+---
+
+## [1.7.0] 2026-03-18
+
+### Changed
+- Packagist package renamed from `kwtsms/kwtsms` to `kwtsms/kwtsms-php` for consistency with the 12-language SDK naming convention (`kwtsms-php`, `kwtsms-js`, `kwtsms-python`, etc.).
+  Existing installs using `kwtsms/kwtsms` should update their `composer.json`. The PHP namespace (`KwtSMS\`) is unchanged.
 
 ---
 
@@ -164,6 +172,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 | Version | Date | PHP | Notable Change |
 |---------|------|-----|----------------|
+| 1.7.0 | 2026-03-18 | 7.4+ | Packagist rename: kwtsms/kwtsms to kwtsms/kwtsms-php |
 | 1.6.0 | 2026-03-17 | 7.4+ | Early credential check in send(), ERR012 page-limit correction |
 | 1.5.0 | 2026-03-13 | 7.4+ | Security fixes: TEST_MODE coercion, LOG_FILE empty-disable, UTF-8 sanitization, set_time_limit(0) |
 | 1.4.0 | 2026-03-13 | 7.4+ | CLI tool moved to kwtsms-cli |
@@ -174,7 +183,8 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-[Unreleased]: https://github.com/boxlinknet/kwtsms-php/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/boxlinknet/kwtsms-php/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/boxlinknet/kwtsms-php/compare/v1.3.0...v1.4.0
