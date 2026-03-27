@@ -247,7 +247,7 @@ class KwtSMS
         $response = $this->post('balance', []);
 
         if (isset($response['result']) && $response['result'] === 'OK') {
-            $balance = (float) ($response['balance'] ?? 0);
+            $balance = (float) ($response['available'] ?? 0);
             $this->purchased = (float) ($response['purchased'] ?? 0);
             return [true, $balance, ''];
         }
@@ -264,7 +264,7 @@ class KwtSMS
 
         if (isset($response['result']) && $response['result'] === 'OK') {
             $this->purchased = (float) ($response['purchased'] ?? 0);
-            return (float) ($response['balance'] ?? 0);
+            return (float) ($response['available'] ?? 0);
         }
 
         return null; // Silent failure per standard usage, logs will capture it

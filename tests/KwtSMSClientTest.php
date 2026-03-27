@@ -29,7 +29,7 @@ class TrackingMockKwtSMS extends KwtSMS
         return ApiErrors::enrichError([
             'result' => 'OK',
             'msg-id' => 'DEFAULT_MSG_ID',
-            'balance' => 100.0,
+            'available' => 100.0,
             'purchased' => 1000.0,
             'points-charged' => 1.0,
             'balance-after' => 99.0,
@@ -195,7 +195,7 @@ class KwtSMSClientTest extends TestCase
     public function testBalanceReturnsFloat(): void
     {
         $this->client->mockResponses = [
-            ['result' => 'OK', 'balance' => 42.5, 'purchased' => 100.0],
+            ['result' => 'OK', 'available' => 42.5, 'purchased' => 100.0],
         ];
 
         $balance = $this->client->balance();
@@ -220,7 +220,7 @@ class KwtSMSClientTest extends TestCase
     public function testPurchasedIsSetAfterBalance(): void
     {
         $this->client->mockResponses = [
-            ['result' => 'OK', 'balance' => 42.5, 'purchased' => 100.0],
+            ['result' => 'OK', 'available' => 42.5, 'purchased' => 100.0],
         ];
 
         $this->client->balance();
@@ -231,7 +231,7 @@ class KwtSMSClientTest extends TestCase
     public function testPurchasedIsSetAfterVerify(): void
     {
         $this->client->mockResponses = [
-            ['result' => 'OK', 'balance' => 50.0, 'purchased' => 200.0],
+            ['result' => 'OK', 'available' => 50.0, 'purchased' => 200.0],
         ];
 
         $this->client->verify();
@@ -588,7 +588,7 @@ class KwtSMSClientTest extends TestCase
     public function testVerifyReturnsSuccessTuple(): void
     {
         $this->client->mockResponses = [
-            ['result' => 'OK', 'balance' => 42.5, 'purchased' => 100.0],
+            ['result' => 'OK', 'available' => 42.5, 'purchased' => 100.0],
         ];
 
         [$ok, $balance, $err] = $this->client->verify();
